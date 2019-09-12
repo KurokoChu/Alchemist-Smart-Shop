@@ -6,19 +6,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "potion")
 @Inheritance(
     strategy = InheritanceType.JOINED
 )
 
 public class Potion {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	
+	private PotionType type;
 
 	void use() {
 		
@@ -30,6 +30,14 @@ public class Potion {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	public PotionType getType() {
+		return this.type;
+	}
+
+	public void setType(PotionType type) {
+		this.type = type;
 	}
 
 }

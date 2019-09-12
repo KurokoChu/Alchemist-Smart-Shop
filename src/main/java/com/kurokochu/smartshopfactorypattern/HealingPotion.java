@@ -1,10 +1,8 @@
 package com.kurokochu.smartshopfactorypattern;
 
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "healing_potion")
 public class HealingPotion extends Potion {
 
 	private String rarity;
@@ -12,7 +10,7 @@ public class HealingPotion extends Potion {
 	private int recoveryAmount;
 	private int cooldownTime;
 	private double price;
-	private String imgUrl;
+	private String img_url;
 
 	public HealingPotion(){
 		
@@ -58,12 +56,12 @@ public class HealingPotion extends Potion {
 		this.price = price;
 	}
 
-	public String getImgURL() {
-		return imgUrl;
+	public String getImgUrl() {
+		return img_url;
 	}
 
-	public void setImgURL(String url) {
-		this.imgUrl = url;
+	public void setImgUrl(String img_url) {
+		this.img_url = img_url;
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package com.kurokochu.smartshopfactorypattern;
 
+import javax.persistence.Entity;
+
+@Entity
 public class StrengthPotion extends Potion {
 
 	private String status;
@@ -7,7 +10,7 @@ public class StrengthPotion extends Potion {
 	private String effect;
 	private int duration;
 	private double price;
-	private String imgURL;
+	private String img_url;
 
 	public String getStatus() {
 		return this.status;
@@ -49,12 +52,12 @@ public class StrengthPotion extends Potion {
 		this.price = price;
 	}
 
-	public String getImgURL() {
-		return imgURL;
+	public String getImgUrl() {
+		return img_url;
 	}
 
-	public void setImgURL(String imgURL) {
-		this.imgURL = imgURL;
+	public void setImgUrl(String img_url) {
+		this.img_url = img_url;
 	}
 
 	@Override
