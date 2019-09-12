@@ -1,8 +1,6 @@
 package com.kurokochu.smartshopfactorypattern;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SmartShopApplicationDemo {
 	
 	@Autowired
-    private static PotionFactory factory = PotionFactory.getInstance();
+    private PotionFactory factory = PotionFactory.getInstance();
 
 	public static void main(String[] args) {
 //		factory.getShelf().add(factory.createPotion(PotionType.RESURRECTION));
@@ -98,6 +96,7 @@ public class SmartShopApplicationDemo {
 	@PostMapping("/product")
 	public ResponseEntity<Potion> create(@Valid @RequestBody Potion potion) {
 		Potion newPotion = factory.createPotion(PotionType.HEALING);
+		factory.savePotion(newPotion);
 		return new ResponseEntity<Potion>(newPotion, HttpStatus.OK);
 	}
 

@@ -1,5 +1,10 @@
 package com.kurokochu.smartshopfactorypattern;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "healing_potion")
 public class HealingPotion extends Potion {
 
 	private String rarity;
