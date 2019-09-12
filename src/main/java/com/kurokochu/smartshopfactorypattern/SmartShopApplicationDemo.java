@@ -1,15 +1,24 @@
 package com.kurokochu.smartshopfactorypattern;
 
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Hello world!
@@ -18,24 +27,27 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
 @RestController
+@EnableAutoConfiguration
 public class SmartShopApplicationDemo {
-
-	private static PotionFactory factory;
+	
+	@Autowired
+    private static PotionFactory factory = PotionFactory.getInstance();
 
 	public static void main(String[] args) {
-		factory = new PotionFactory();
-		factory.init();
-
-		factory.getShelf().add(factory.createPotion(PotionType.RESURRECTION));
-		factory.getShelf().add(factory.createPotion(PotionType.RESURRECTION));
-		factory.getShelf().add(factory.createPotion(PotionType.STRENGTH));
-		factory.getShelf().add(factory.createPotion(PotionType.HEALING));
-		factory.getShelf().add(factory.createPotion(PotionType.RESURRECTION));
-		factory.getShelf().add(factory.createPotion(PotionType.STRENGTH));
-		factory.getShelf().add(factory.createPotion(PotionType.HEALING));
-		factory.getShelf().add(factory.createPotion(PotionType.HEALING));
+//		factory.getShelf().add(factory.createPotion(PotionType.RESURRECTION));
+//		factory.getShelf().add(factory.createPotion(PotionType.RESURRECTION));
+//		factory.getShelf().add(factory.createPotion(PotionType.STRENGTH));
+//		factory.getShelf().add(factory.createPotion(PotionType.HEALING));
+//		factory.getShelf().add(factory.createPotion(PotionType.RESURRECTION));
+//		factory.getShelf().add(factory.createPotion(PotionType.STRENGTH));
+//		factory.getShelf().add(factory.createPotion(PotionType.HEALING));
+//		factory.getShelf().add(factory.createPotion(PotionType.HEALING));
 
 		SpringApplication.run(SmartShopApplicationDemo.class, args);
+//		System.out.println(potionRepository.findAll());
+//		factory = PotionFactory.getInstance();
+//
+//		factory.savePotion(factory.createPotion(PotionType.HEALING));
 	}
 
 	@RequestMapping("/")
@@ -62,151 +74,61 @@ public class SmartShopApplicationDemo {
 		return page;
 	}
 
-	@RequestMapping("/potion")
-	public String viewPotionList() {
-		String page = "";
+	@GetMapping("/product")
+	public ResponseEntity<List<Potion>> index() {
+		List<Potion> potions = factory.getShelf();
+		if (potions == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			String jsonInString = mapper.writeValueAsString(factory.getShelf());
-			page += "<b>result: </b>";
-			page += jsonInString;
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		page += "<h2>List of Potions</h2>";
-		for (Potion potion : factory.getShelf()) {
-			if (potion instanceof HealingPotion) {
-				page += "<ul>";
-				page += String.format("<li style=\"list-style-type: none;\"><img src=\"%s\"></li>", ((HealingPotion) potion).getImgURL());
-				page += String.format("<li><b>%s [ID: %d]</b></li>", potion, potion.getId());
-				page += String.format("<li style=\"list-style-type: none;\">%s</li>", ((HealingPotion) potion).getDescription());
-				page += String.format("<li style=\"list-style-type: none;\">Recovery %d HP</li>", ((HealingPotion) potion).getRecoveryAmount());
-				page += String.format("<li style=\"list-style-type: none;\">Cooldown Time %d second</li>", ((HealingPotion) potion).getCooldownTime());
-				page += String.format("<li style=\"list-style-type: none;\">Price %.0f G</li>", ((HealingPotion) potion).getPrice());
-				page += "</ul><br>";
-			} else if (potion instanceof ResurrectionPotion) {
-				page += "<ul>";
-				page += String.format("<li style=\"list-style-type: none;\"><img src=\"%s\"></li>", ((ResurrectionPotion) potion).getImgURL());
-				page += String.format("<li><b>%s [ID: %d]</b></li>", potion, potion.getId());
-				page += String.format("<li style=\"list-style-type: none;\">%s</li>", ((ResurrectionPotion) potion).getDescription());
-				page += String.format("<li style=\"list-style-type: none;\">Cast Time %d second</li>", ((ResurrectionPotion) potion).getCastTime());
-				page += String.format("<li style=\"list-style-type: none;\">Cooldown Time %d second</li>", ((ResurrectionPotion) potion).getCooldownTime());
-				page += String.format("<li style=\"list-style-type: none;\">Price %.0f G</li>", ((ResurrectionPotion) potion).getPrice());
-				page += "</ul><br>";
-				
-			} else if (potion instanceof StrengthPotion) {
-				page += "<ul>";
-				page += String.format("<li style=\"list-style-type: none;\"><img src=\"%s\"></li>", ((StrengthPotion) potion).getImgURL());
-				page += String.format("<li><b>%s [ID: %d]</b></li>", potion, potion.getId());
-				page += String.format("<li style=\"list-style-type: none;\">%s</li>", ((StrengthPotion) potion).getDescription());
-				page += String.format("<li style=\"list-style-type: none;\">%s</li>", ((StrengthPotion) potion).getEffect());
-				page += String.format("<li style=\"list-style-type: none;\">Duration %d second</li>", ((StrengthPotion) potion).getDuration());
-				page += String.format("<li style=\"list-style-type: none;\">Price %.0f G</li>", ((StrengthPotion) potion).getPrice());
-				page += "</ul><br>";
-			}
-		}
-		return page;
+		return new ResponseEntity<List<Potion>>(potions, HttpStatus.OK);
 	}
 
-	@RequestMapping("/potion/{id}")
-	public String viewPotionById(@PathVariable int id) {
-		Potion potion = factory.getPotionById(id);
+	@GetMapping("/product/{id}")
+	public ResponseEntity<Potion> viewPotion(@PathVariable String id) {
+		long productId = Long.parseLong(id);
+		Potion potion = factory.getPotionById(productId).get();
 		if (potion == null) {
-			return "Potion Not Found";
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
-		String page = "";
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			String jsonInString = mapper.writeValueAsString(potion);
-			page += "<b>result: </b>";
-			page += jsonInString;
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		if (potion instanceof HealingPotion) {
-			page += "<ul>";
-			page += String.format("<li style=\"list-style-type: none;\"><img src=\"%s\"></li>", ((HealingPotion) potion).getImgURL());
-			page += String.format("<li><b>%s [ID: %d]</b></li>", potion, potion.getId());
-			page += String.format("<li style=\"list-style-type: none;\">%s</li>", ((HealingPotion) potion).getDescription());
-			page += String.format("<li style=\"list-style-type: none;\">Recovery %d HP</li>", ((HealingPotion) potion).getRecoveryAmount());
-			page += String.format("<li style=\"list-style-type: none;\">Cooldown Time %d second</li>", ((HealingPotion) potion).getCooldownTime());
-			page += String.format("<li style=\"list-style-type: none;\">Price %.0f G</li>", ((HealingPotion) potion).getPrice());
-			page += "</ul><br>";
-		} else if (potion instanceof ResurrectionPotion) {
-			page += "<ul>";
-			page += String.format("<li style=\"list-style-type: none;\"><img src=\"%s\"></li>", ((ResurrectionPotion) potion).getImgURL());
-			page += String.format("<li><b>%s [ID: %d]</b></li>", potion, potion.getId());
-			page += String.format("<li style=\"list-style-type: none;\">%s</li>", ((ResurrectionPotion) potion).getDescription());
-			page += String.format("<li style=\"list-style-type: none;\">Cast Time %d second</li>", ((ResurrectionPotion) potion).getCastTime());
-			page += String.format("<li style=\"list-style-type: none;\">Cooldown Time %d second</li>", ((ResurrectionPotion) potion).getCooldownTime());
-			page += String.format("<li style=\"list-style-type: none;\">Price %.0f G</li>", ((ResurrectionPotion) potion).getPrice());
-			page += "</ul><br>";
-			
-		} else if (potion instanceof StrengthPotion) {
-			page += "<ul>";
-			page += String.format("<li style=\"list-style-type: none;\"><img src=\"%s\"></li>", ((StrengthPotion) potion).getImgURL());
-			page += String.format("<li><b>%s [ID: %d]</b></li>", potion, potion.getId());
-			page += String.format("<li style=\"list-style-type: none;\">%s</li>", ((StrengthPotion) potion).getDescription());
-			page += String.format("<li style=\"list-style-type: none;\">%s</li>", ((StrengthPotion) potion).getEffect());
-			page += String.format("<li style=\"list-style-type: none;\">Duration %d second</li>", ((StrengthPotion) potion).getDuration());
-			page += String.format("<li style=\"list-style-type: none;\">Price %.0f G</li>", ((StrengthPotion) potion).getPrice());
-			page += "</ul>";
-		}
-		return page;
+		return new ResponseEntity<Potion>(potion, HttpStatus.OK);
 	}
 
-	@RequestMapping("/potion/add")
-    public String add(@RequestBody Potion potion){
-		String page = "";
-        if (factory.add(potion)) {
-        	page += "\"status\": \"1\"";
-            return page;
-        }
+	@PostMapping("/product")
+	public ResponseEntity<Potion> create(@Valid @RequestBody Potion potion) {
+		Potion newPotion = factory.createPotion(PotionType.HEALING);
+		return new ResponseEntity<Potion>(newPotion, HttpStatus.OK);
+	}
 
-        page += "\"status\": \"0\"";
-        return page;
-    }
-
-	@RequestMapping("/potion/remove")
-    public String remove(@RequestParam(value = "id") int id){
-		String page = "";
-        if(factory.remove(id)) {
-        	page += "\"status\": \"1\"";
-            return page;
-        }
- 
-        page += "\"status\": \"0\"";
-        return page;
-    }
-	
-	@RequestMapping("/checkout/{id}")
-	public String checkoutPotionById(@PathVariable int id) {
-		Potion potion = factory.getPotionById(id);
-		if(potion == null) {
-            return "Potion Not Found";
-        }
- 
-		String page = "";
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			String jsonInString = mapper.writeValueAsString(potion);
-			page += "<b>result: </b>";
-			page += jsonInString;
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	@PutMapping("/product/{id}")
+	public ResponseEntity<Potion> update(@PathVariable String id, @Valid @RequestBody Potion potion) {
+		long productId = Long.parseLong(id);
+		Potion potionInstance = factory.getPotionById(productId).get();
+		if (potionInstance instanceof HealingPotion) {
+			((HealingPotion) potionInstance).setRarity(((HealingPotion) potion).getRarity());
+			((HealingPotion) potionInstance).setDescription(((HealingPotion) potion).getDescription());
+			((HealingPotion) potionInstance).setRecoveryAmount(((HealingPotion) potion).getRecoveryAmount());
+			((HealingPotion) potionInstance).setCooldownTime(((HealingPotion) potion).getCooldownTime());
 		}
 
-		page += String.format("<p>%s [ID: %d]</p>", potion, potion.getId());
-		page += "<h4>SOLD!</h4>";
-		factory.remove(id);
-		return page;
+		factory.savePotion(potionInstance);
+		if (potionInstance == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<Potion>(potionInstance, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/product/{id}")
+	public ResponseEntity<Potion> delete(@PathVariable String id) {
+		long productId = Long.parseLong(id);
+		if (factory.deletePotionById(productId)) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<>(HttpStatus.OK);
+
 	}
 
 }

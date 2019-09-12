@@ -1,22 +1,13 @@
 package com.kurokochu.smartshopfactorypattern;
 
-public class StrengthPotion implements Potion {
+public class StrengthPotion extends Potion {
 
-	private int id;
 	private String status;
 	private String description;
 	private String effect;
 	private int duration;
 	private double price;
 	private String imgURL;
-
-	public int getId() {
-		return this.id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getStatus() {
 		return this.status;

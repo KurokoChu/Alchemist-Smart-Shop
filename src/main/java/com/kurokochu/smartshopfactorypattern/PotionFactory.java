@@ -1,15 +1,33 @@
 package com.kurokochu.smartshopfactorypattern;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
 public class PotionFactory {
 
-	private List<Potion> potions;
-	private int primary_id;
+	private static PotionFactory instance = null;
 
-	public PotionFactory() {
+	@Autowired
+	private PotionRepository potionRepository;
 
+	public static PotionFactory getInstance() {
+        if(instance == null){
+            instance = new PotionFactory();
+        }
+ 
+        return instance;
+    }
+
+	public List<Potion> getShelf() {
+		return potionRepository.findAll();
+	}
+
+	public Optional<Potion> getPotionById(long id) {
+		return potionRepository.findById(id);
 	}
 
 	public Potion createPotion(PotionType type) {
@@ -21,7 +39,6 @@ public class PotionFactory {
 		switch (type) {
 		case HEALING:
 			potion = new HealingPotion();
-			potion.setId(++primary_id);
 			((HealingPotion) potion).setRarity("Beginner");
 			((HealingPotion) potion).setDescription("A potion that is used to recover HP.");
 			((HealingPotion) potion).setRecoveryAmount(1000);
@@ -31,7 +48,6 @@ public class PotionFactory {
 			return potion;
 		case RESURRECTION:
 			potion = new ResurrectionPotion();
-			potion.setId(++primary_id);
 			((ResurrectionPotion) potion).setRarity("Elite");
 			((ResurrectionPotion) potion).setDescription("A mysterious potion giving vitality to a allies so that they can revive.");
 			((ResurrectionPotion) potion).setCastTime(3);
@@ -41,7 +57,6 @@ public class PotionFactory {
 			return potion;
 		case STRENGTH:
 			potion = new StrengthPotion();
-			potion.setId(++primary_id);
 			((StrengthPotion) potion).setStatus("Magical Attack");
 			((StrengthPotion) potion).setDescription("Mysterious potion which grants the user the magical attack power.");
 			((StrengthPotion) potion).setEffect("Magical Attack +15%");
@@ -56,56 +71,22 @@ public class PotionFactory {
 		return null;
 	}
 
-	public List<Potion> getShelf() {
-		return potions;
-	}
-
-	public void init() {
-		potions = new ArrayList<Potion>();
-		primary_id = -1;
-	}
-
-	public boolean add(Potion potion) {
+	public boolean savePotion(Potion potion) {
 		if (potion == null) {
 			return false;
 		}
 
-		potion.setId(++this.primary_id);
-		this.potions.add(potion);
+		potionRepository.save(potion);
 		return true;
 	}
 
-	public boolean remove(int id) {
-		if (id < 0) {
+	public boolean deletePotionById(long id) {
+		if (!potionRepository.existsById(id)) {
 			return false;
 		}
 
-		for (Potion potion: potions) {
-			if (potion.getId() == id) {
-				potions.remove(potion);
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public Potion getPotionById(int id) {
-		if (id < 0) {
-			return null;
-		}
-
-		for (Potion potion: potions) {
-			if (potion == null) {
-				continue;
-			}
-
-			if (potion.getId() == id) {
-				return potion;
-			}
-		}
-
-		return null;
+		potionRepository.deleteById(id);
+		return true;
 	}
 
 }

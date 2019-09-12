@@ -1,22 +1,13 @@
 package com.kurokochu.smartshopfactorypattern;
 
-public class ResurrectionPotion implements Potion {
+public class ResurrectionPotion extends Potion {
 
-	private int id;
 	private String rarity;
 	private String description;
 	private int cast_time;
 	private int cooldown_time;
 	private double price;
 	private String imgURL;
-
-	public int getId() {
-		return this.id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getRarity() {
 		return this.rarity;

@@ -1,23 +1,18 @@
 package com.kurokochu.smartshopfactorypattern;
 
-public class HealingPotion implements Potion {
+public class HealingPotion extends Potion {
 
-	private int id;
 	private String rarity;
 	private String description;
-	private int recovery_amount;
-	private int cooldown_time;
+	private int recoveryAmount;
+	private int cooldownTime;
 	private double price;
-	private String imgURL;
+	private String imgUrl;
 
-	public int getId() {
-		return this.id;
-	}
+	public HealingPotion(){
+		
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
-	
 	public String getRarity() {
 		return this.rarity;
 	}
@@ -35,19 +30,19 @@ public class HealingPotion implements Potion {
 	}
 
 	public int getRecoveryAmount() {
-		return this.recovery_amount;
+		return this.recoveryAmount;
 	}
 
 	public void setRecoveryAmount(int amount) {
-		this.recovery_amount = amount;
+		this.recoveryAmount = amount;
 	}
 
 	public int getCooldownTime() {
-		return this.cooldown_time;
+		return this.cooldownTime;
 	}
 
 	public void setCooldownTime(int second) {
-		this.cooldown_time = second;
+		this.cooldownTime = second;
 	}
 
 	public double getPrice() {
@@ -57,13 +52,13 @@ public class HealingPotion implements Potion {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	
+
 	public String getImgURL() {
-		return imgURL;
+		return imgUrl;
 	}
 
 	public void setImgURL(String url) {
-		this.imgURL = url;
+		this.imgUrl = url;
 	}
 
 	@Override

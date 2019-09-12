@@ -1,11 +1,27 @@
 package com.kurokochu.smartshopfactorypattern;
 
-public interface Potion {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-	void use();
+@Entity
+public class Potion {
 	
-	int getId();
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-	void setId(int id);
+	void use() {
+		
+	};
+
+	public long getId() {
+		return this.id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 }
