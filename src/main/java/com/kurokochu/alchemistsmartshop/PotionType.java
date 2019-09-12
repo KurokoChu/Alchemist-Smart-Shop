@@ -1,4 +1,4 @@
-package com.kurokochu.smartshopfactorypattern;
+package com.kurokochu.alchemistsmartshop;
 
 public enum PotionType {
 

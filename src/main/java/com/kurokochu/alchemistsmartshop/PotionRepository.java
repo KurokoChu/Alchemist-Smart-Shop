@@ -1,4 +1,4 @@
-package com.kurokochu.smartshopfactorypattern;
+package com.kurokochu.alchemistsmartshop;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.kurokochu.smartshopfactorypattern;
+package com.kurokochu.alchemistsmartshop;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

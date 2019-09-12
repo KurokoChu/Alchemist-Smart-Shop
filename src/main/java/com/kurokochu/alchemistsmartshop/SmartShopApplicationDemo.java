@@ -1,4 +1,4 @@
-package com.kurokochu.smartshopfactorypattern;
+package com.kurokochu.alchemistsmartshop;
 
 import java.util.List;
 import javax.validation.Valid;
